@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BlinkstickChrome</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <form style="width: 100%; padding: 20px 0;">
+    Channel:
+    0: <input type="radio" name="channel" value="0" checked="true" />
+    1: <input type="radio" name="channel" value="1" /><br/>
+    Red:<input id="redSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
+    Green:<input id="greenSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
+    Blue:<input id="blueSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
+  </form>
+
+  <button type="button" id="off">Off</button>
+
+  <script src="main.js"></script>
+
+</body>
+</html>
