@@ -36,6 +36,7 @@ function setColor(i,r,g,b) {
 chrome.hid.onDeviceAdded.addListener(function(){
 
   console.log('Blinkstick added');
+
   initDeviceConnection();
 
 });
@@ -43,6 +44,9 @@ chrome.hid.onDeviceAdded.addListener(function(){
 chrome.hid.onDeviceRemoved.addListener(function(){
 
   console.log('Blinkstick removed');
+  
+  $('.sliderControl').remove();
+  $('.blinkstickInfo').text('No Blinkstick Found');
 
 });
 
@@ -54,16 +58,24 @@ function initDeviceConnection(){
      console.log('device not found');
      return;
     }
+    
+    console.log(devices);
 
     hidDevice = devices[0].deviceId;
 
     chrome.hid.connect(hidDevice, function(connection) {
-       connectionId = connection.connectionId;
+      connectionId = connection.connectionId;
+      initSliders(2);
+      $('.blinkstickInfo').text('Blinkstick Nano Found');
     });
   
   });
 
-  for (var x = 0; x < 2; x++) {
+}
+
+function initSliders(n) {
+
+  for (var x = 0; x < n; x++) {
 
     var template = sliderTemplate(x);
     $('body').append(template);
@@ -74,13 +86,12 @@ function initDeviceConnection(){
   for (var s = 0; s < sliders.length; s++) {
     sliders[s].addEventListener('input', slider);
   }
-
   
 }
 
 function sliderTemplate(i) {
 
-  var template = '<div class="col-sm-2">'+
+  var template = '<div class="col-sm-2 sliderControl">'+
     '<div class="panel panel-default">'+
     '  <div class="panel-heading">'+
     '    <h3 class="panel-title">LED '+i+' Control</h3>'+
