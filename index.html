@@ -1,24 +1,73 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>BlinkstickChrome</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BlinkstickChrome</title>
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+  </head>
+  <body>
 
-<body>
+    
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">BlinkstickChrome</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Config</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+    
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.blinkstick.com/">Get A Blinkstick</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    
+    
+  
 
-  <form style="width: 100%; padding: 20px 0;">
-    Channel:
-    0: <input type="radio" name="channel" value="0" checked="true" />
-    1: <input type="radio" name="channel" value="1" /><br/>
-    Red:<input id="redSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
-    Green:<input id="greenSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
-    Blue:<input id="blueSlider" type="range" min=0 max=255 step=1 value=0 style="width:100%" />
-  </form>
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Blinkstick Info</h3>
+      </div>
+      <div class="panel-body">
+        About the current Blinkstick.
+      </div>
+    </div>
+  </div>
 
-  <button type="button" id="off">Off</button>
 
-  <script src="main.js"></script>
 
-</body>
+    <script src="assets/jquery-2.1.4.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="main.js"></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </body>
 </html>
