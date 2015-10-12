@@ -18,6 +18,18 @@ function slider(){
 
 }
 
+function offButton(){
+
+  var i = this.getAttribute('rel');
+
+  document.querySelector("input.red[rel='"+i+"']").value = 0;
+  document.querySelector("input.green[rel='"+i+"']").value = 0;
+  document.querySelector("input.blue[rel='"+i+"']").value = 0;
+
+  setColor(i,0,0,0);
+  
+}
+
 function setColor(i,r,g,b) {
   
   if (connectionId) {
@@ -65,7 +77,7 @@ function initDeviceConnection(){
 
     chrome.hid.connect(hidDevice, function(connection) {
       connectionId = connection.connectionId;
-      initSliders(2);
+      initSliders(8);
       $('.blinkstickInfo').text('Blinkstick Nano Found');
     });
   
@@ -87,32 +99,39 @@ function initSliders(n) {
     sliders[s].addEventListener('input', slider);
   }
   
+  var offButtons = document.querySelectorAll("button.off");
+  for (var ob = 0; ob < offButtons.length; ob++) {
+    offButtons[ob].addEventListener('click', offButton);
+  }
+
+  
 }
 
 function sliderTemplate(i) {
 
-  var template = '<div class="col-sm-2 sliderControl">'+
+  var template = '<div class="col-sm-3 sliderControl">'+
     '<div class="panel panel-default">'+
-    '  <div class="panel-heading">'+
+    '  <div class="panel-heading clearfix">'+
+    '     <div class="btn-group pull-right"><button class="btn btn-default btn-xs off" rel="'+i+'">Off</button></div>'+
     '    <h3 class="panel-title">LED '+i+' Control</h3>'+
     '  </div>'+
     '  <div class="panel-body">'+
 
     '      <div class="row">'+
     '        <div class="col-xs-3" style="text-align: center;">'+
-    '          <input class="red" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 200px;" orient="vertical" />'+
+    '          <input class="red" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 150px;" orient="vertical" />'+
     '          R'+
     '        </div>'+
     '        <div class="col-xs-3" style="text-align: center;">'+
-    '          <input class="green" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 200px;" orient="vertical" />'+
+    '          <input class="green" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 150px;" orient="vertical" />'+
     '          G'+
     '        </div>'+
     '        <div class="col-xs-3" style="text-align: center;">'+
-    '          <input class="blue" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 200px;" orient="vertical" />'+
+    '          <input class="blue" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 150px;" orient="vertical" />'+
     '          B'+
     '        </div>'+
     '        <div class="col-xs-3" style="text-align: center;">'+
-    '          <input class="lum" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 200px;" orient="vertical" />'+
+    '          <input class="lum" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 150px;" orient="vertical" disabled />'+
     '          F'+
     '        </div>'+
     '      </div>'+
