@@ -3,6 +3,7 @@ var connectionId = -1;
 var MY_HID_VENDOR_ID = 8352;
 var MY_HID_PRODUCT_ID = 16869;
 var DEVICE_INFO = {"vendorId": MY_HID_VENDOR_ID, "productId": MY_HID_PRODUCT_ID };
+var linked = [];
 
 var BlinkstickChrome = function(){
   
@@ -35,17 +36,43 @@ var BlinkstickChrome = function(){
     bsc.setColor(i,0,0,0);
     
   };
+
+  this.linkButton = function(){
+    
+    var chk = $(this).find('input');
+
+    var i = $(chk).attr('rel');
+
+    linked.push(i);
+
+  };
   
+
   this.setColor = function(i,r,g,b) {
     
     if (connectionId) {
   
-      var data = [0, i, r, g, b];
-      var arr = new Uint8Array(data);
-    
-      chrome.hid.sendFeatureReport( connectionId, 5, arr.buffer, function(){
-        //console.log('Set color');
-      });
+      if ($.inArray(i, linked) !== -1) {
+        
+        console.log('Linked')
+
+        var data = [0, g, r, b, g, r, b, g, r, b, g, r, b, g, r, b, g, r, b, g, r, b, g, r, b];
+        var arr = new Uint8Array(data);
+      
+        chrome.hid.sendFeatureReport( connectionId, 6, arr.buffer, function(){
+          //console.log('Set color');
+        });
+        
+      } else {
+
+        var data = [0, i, r, g, b];
+        var arr = new Uint8Array(data);
+      
+        chrome.hid.sendFeatureReport( connectionId, 5, arr.buffer, function(){
+          //console.log('Set color');
+        });
+ 
+      }
   
     }
   
@@ -89,6 +116,11 @@ var BlinkstickChrome = function(){
       offButtons[ob].addEventListener('click', bsc.offButton);
     }
     
+    var linkButtons = document.querySelectorAll("div.headButtons .btn-default");
+    for (var lb = 0; lb < linkButtons.length; lb++) {
+      linkButtons[lb].addEventListener('click', bsc.linkButton);
+    }
+
   };
   
   this.sliderTemplate = function(i) {
@@ -96,8 +128,8 @@ var BlinkstickChrome = function(){
     var template = '<div class="col-sm-3 sliderControl">'+
       '<div class="panel panel-default">'+
       '  <div class="panel-heading clearfix">'+
-      '     <div class="btn-group pull-right">'+
-      '       <button class="btn btn-default btn-xs link" rel="'+i+'">Link</button>'+
+      '     <div class="btn-group pull-right headButtons" data-toggle="buttons">'+
+      '       <label class="btn btn-default btn-xs"><input type="checkbox" name="link" class="link" rel="'+i+'">Link</button></label>'+
       '       <button class="btn btn-default btn-xs off" rel="'+i+'">Off</button>'+
       '     </div>'+
       '    <h3 class="panel-title"><i class="glyphicon glyphicon-cd led"></i> LED '+i+' Control</h3>'+
