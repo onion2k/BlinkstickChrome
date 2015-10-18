@@ -11,3 +11,8 @@ input[type=range][orient=vertical]
     height: 175px;
     margin: 0 auto;
 }
+
+canvas {
+  width: 800px;
+  height: 200px;
+}

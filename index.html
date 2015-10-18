@@ -27,8 +27,22 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#">Config</a></li>
             <li><a href="#">About</a></li>
+            <li><a href="#">Config</a></li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Emulators <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="emu" data-name="Blinkstick" data-leds="1">Blinkstick</a></li>
+                <li><a href="#" class="emu" data-name="Blinkstick Nano" data-leds="2">Blinkstick Nano</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" class="emu" data-name="Blinkstrip" data-leds="8">Blinkstrip</a></li>
+                <li><a href="#" class="emu" data-name="Blinksquare" data-leds="8">Blinksquare</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" class="emu" data-name="Blinkstick Pro" data-leds="4">Blinkstick Pro</a></li>
+              </ul>
+            </li>
+    
           </ul>
     
           <ul class="nav navbar-nav navbar-right">
@@ -38,22 +52,76 @@
       </div><!-- /.container-fluid -->
     </nav>
     
-    
-  
-  
-    <div class="col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Blinkstick Info</h3>
+
+    <div id="infoControl" class="clearfix" style="background-color: #FFF;">
+
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading clearfix">
+            <div class="btn-group pull-right">
+
+            </div>
+            <h3 class="panel-title">Blinkstick Info</h3>
+          </div>
+          <div class="panel-body blinkstickInfo">No Blinkstick Found</div>
         </div>
-        <div class="panel-body blinkstickInfo">No Blinkstick Found</div>
       </div>
+    
     </div>
   
+    <div id="mainControl" class="clearfix" style="background-color: #BBB; padding-top: 15px;">
+
+      <div class="col-sm-3 sliderControl">
+      <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+           <div class="btn-group pull-right headButtons" data-toggle="buttons">
+             <button class="btn btn-default btn-xs off" rel="main">Off</button>
+           </div>
+          <h3 class="panel-title"><i class="glyphicon glyphicon-cd led" rel="main"></i> LED Main Control</h3>
+        </div>
+        <div class="panel-body">
+  
+            <div class="row">
+              <div class="col-xs-2" style="text-align: center;">
+                <input class="red" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                R
+              </div>
+              <div class="col-xs-2" style="text-align: center;">
+                <input class="green" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                G
+              </div>
+              <div class="col-xs-2" style="text-align: center;">
+                <input class="blue" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                B
+               </div>
+              <div class="col-xs-6" style="text-align: center;">
+                <input class="lum" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" disabled />
+                F
+              </div>
+            </div>
+  
+        </div>
+       </div>
+      </div>
+
+      <div id="emuPreview" class="col-sm-9"></div>
+    
+    </div>
+
+
+  
+    <div id="ledSliders" class="clearfix" style="background-color: #999; padding-top: 15px; margin-top: 0px; height: 380px"></div>
+
 
 
     <script src="assets/jquery-2.1.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/three.min.js"></script>
+
+    <script src="blinkstickCanvasRenderer.js"></script>
+    <script src="blinkstickChromeSlider.js"></script>
+    <script src="blinkstickChrome.js"></script>
+
     <script src="main.js"></script>
   
   
