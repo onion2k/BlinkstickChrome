@@ -71,7 +71,7 @@
   
     <div id="mainControl" class="clearfix" style="background-color: #BBB; padding-top: 15px;">
 
-      <div class="col-sm-3 sliderControl">
+      <div class="col-sm-3 sliderControlMain">
       <div class="panel panel-default">
         <div class="panel-heading clearfix">
            <div class="btn-group pull-right headButtons" data-toggle="buttons">
@@ -83,15 +83,15 @@
   
             <div class="row">
               <div class="col-xs-2" style="text-align: center;">
-                <input class="red" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                <input class="red" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" disabled />
                 R
               </div>
               <div class="col-xs-2" style="text-align: center;">
-                <input class="green" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                <input class="green" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" disabled />
                 G
               </div>
               <div class="col-xs-2" style="text-align: center;">
-                <input class="blue" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" />
+                <input class="blue" rel="main" type="range" min=0 max=255 step=1 value=0 style="height: 100px;" orient="vertical" disabled />
                 B
                </div>
               <div class="col-xs-6" style="text-align: center;">
@@ -117,6 +117,7 @@
     <script src="assets/jquery-2.1.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/three.min.js"></script>
+    <script src="assets/orbit.controls.js"></script>
 
     <script src="blinkstickCanvasRenderer.js"></script>
     <script src="blinkstickChromeSlider.js"></script>

@@ -152,10 +152,13 @@ var BlinkstickChrome = function(){
         $('.blinkstickInfo').text('Emulated '+name+' Found');
   
         bsc.initSliders(leds);
+        $('input[rel=main]').attr({'disabled':false});
   
   };
 
   this.initSliders = function(n){
+
+    $('div.sliderControl').remove();
     
     for (var x = 0; x < n; x++) {
       sliderControls.push(new BlinkstickChromeSlider());
