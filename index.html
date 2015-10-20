@@ -33,13 +33,13 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Emulators <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#" class="emu" data-name="Blinkstick" data-leds="1">Blinkstick</a></li>
-                <li><a href="#" class="emu" data-name="Blinkstick Nano" data-leds="2">Blinkstick Nano</a></li>
+                <li class="disabled"><a href="#" class="emu" data-name="Blinkstick" data-leds="1">Blinkstick</a></li>
+                <li class="disabled"><a href="#" class="emu" data-name="Blinkstick Nano" data-leds="2">Blinkstick Nano</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#" class="emu" data-name="Blinkstrip" data-leds="8">Blinkstrip</a></li>
-                <li><a href="#" class="emu" data-name="Blinksquare" data-leds="8">Blinksquare</a></li>
+                <li class="disabled"><a href="#" class="emu" data-name="Blinksquare" data-leds="8">Blinksquare</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#" class="emu" data-name="Blinkstick Pro" data-leds="4">Blinkstick Pro</a></li>
+                <li class="disabled"><a href="#" class="emu" data-name="Blinkstick Pro" data-leds="4">Blinkstick Pro</a></li>
               </ul>
             </li>
     
@@ -119,6 +119,7 @@
     <script src="assets/three.min.js"></script>
     <script src="assets/orbit.controls.js"></script>
 
+    <!-- TODO Load by manifest //-->
     <script src="blinkstickCanvasRenderer.js"></script>
     <script src="blinkstickChromeSlider.js"></script>
     <script src="blinkstickChrome.js"></script>

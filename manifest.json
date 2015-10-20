@@ -13,11 +13,13 @@
 
   "app": {
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["tcp-server.js","BlinkstickChromeTCPServer.js","background.js"]
     }
   },
 
   "permissions": [
+    "system.network",
+    "tabs",
     "usb",
     "hid",
     {
@@ -28,5 +30,10 @@
         }
       ]
     }
-  ]
+  ],
+  "sockets": {
+    "tcpServer": {
+      "listen": ""
+    }
+  }
 }

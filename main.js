@@ -22,3 +22,16 @@ window.onload = function() { bsc.initDeviceConnection(); };
 
 var renderer = new BlinkstickCanvasRenderer();
 renderer.render();
+
+var messageListener = chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+
+    renderer.setColor(request.i,request.r,request.g,request.b);
+
+    sendResponse({"set": "red"});
+
+  });
