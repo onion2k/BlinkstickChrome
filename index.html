@@ -40,6 +40,8 @@
                 <li class="disabled"><a href="#" class="emu" data-name="Blinksquare" data-leds="8">Blinksquare</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="disabled"><a href="#" class="emu" data-name="Blinkstick Pro" data-leds="4">Blinkstick Pro</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" class="emu" data-name="none" data-leds="0">No emulator</a></li>
               </ul>
             </li>
     
@@ -69,9 +71,9 @@
     
     </div>
   
-    <div id="mainControl" class="clearfix" style="background-color: #BBB; padding-top: 15px;">
+    <div id="mainControl" class="clearfix" style="background-color: #BBB; padding-top: 15px; height: 225px;">
 
-      <div class="col-sm-3 sliderControlMain">
+      <div id="sliderControlMain" class="col-sm-3 sliderControlMain" style="display: none;">
       <div class="panel panel-default">
         <div class="panel-heading clearfix">
            <div class="btn-group pull-right headButtons" data-toggle="buttons">
@@ -104,12 +106,10 @@
        </div>
       </div>
 
-      <div id="emuPreview" class="col-sm-9"></div>
+      <div id="emuPreview" class="col-sm-9" style="display: none;"></div>
     
     </div>
 
-
-  
     <div id="ledSliders" class="clearfix" style="background-color: #999; padding-top: 15px; margin-top: 0px; height: 380px"></div>
 
 

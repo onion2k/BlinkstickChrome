@@ -148,17 +148,39 @@ var BlinkstickChrome = function(){
         
         var name = $(this).attr('data-name');
         var leds = $(this).attr('data-leds');
+        
+        if (leds > 0) {
+          
+          renderer.start(leds);
   
-        $('.blinkstickInfo').text('Emulated '+name+' Found');
-  
-        bsc.initSliders(leds);
-        $('input[rel=main]').attr({'disabled':false});
-  
+          $('.blinkstickInfo').text('Emulated '+name+' Found');
+    
+          bsc.initSliders(leds);
+          $('input[rel=main]').attr({'disabled':false});
+          $('#sliderControlMain').show();
+          $('#emuPreview').show();
+          renderer.render();
+
+        } else {
+
+          $('.blinkstickInfo').text('No Blinkstick Found');
+    
+          bsc.initSliders(0);
+          $('input[rel=main]').attr({'disabled':true});
+          $('#sliderControlMain').hide();
+          $('#emuPreview').hide();
+          
+          renderer.stop();
+          
+        }
+
   };
 
   this.initSliders = function(n){
 
     $('div.sliderControl').remove();
+
+    sliderControls = [];
     
     for (var x = 0; x < n; x++) {
       sliderControls.push(new BlinkstickChromeSlider());

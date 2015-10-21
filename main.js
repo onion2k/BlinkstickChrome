@@ -21,17 +21,11 @@ var bsc = new BlinkstickChrome();
 window.onload = function() { bsc.initDeviceConnection(); };
 
 var renderer = new BlinkstickCanvasRenderer();
-renderer.render();
 
-var messageListener = chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
+var messageListener = chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     renderer.setColor(request.i,request.r,request.g,request.b);
 
-    sendResponse({"set": "red"});
+    sendResponse({"response": "done"});
 
-  });
+});
