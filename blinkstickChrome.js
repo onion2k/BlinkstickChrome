@@ -1,7 +1,49 @@
-
+  /**
+   * Main obj for BlinkstickChrome
+   */
 var BlinkstickChrome = function(){
   
   var bsc = this;
+
+  var timer = new Timer();
+  var p = 10000 * 1000;
+  var pE = 0;
+  var elapsedTotal = 0;
+
+  timer.stop();
+
+  timer = new Timer({
+    tick    : 0.01,
+    ontick  : function(s) {
+
+      elapsed = p-s;
+      elapsedTotal += elapsed;
+      p = s;
+      
+      //console.log(pE);
+      
+      for (var i = 0; i < leds.length; i++) {
+
+        if (leds[i].frequency > 0) {
+          
+          if (elapsedTotal - leds[i].lastTick > 1000 / leds[i].frequency) {
+
+            leds[i].slider.toggle();
+            leds[i].lastTick = elapsedTotal;
+
+          }
+
+        }
+
+      }      
+
+    }
+  });
+  
+  timer.start(10000);
+
+
+  var leds = [];
 
   this.slider = function(){
 
@@ -12,6 +54,14 @@ var BlinkstickChrome = function(){
     var b = document.querySelector("input.blue[rel='"+i+"']").value;
 
     bsc.setColor(i,r,g,b);
+
+    if (i !== 'main') {
+
+      var flash = document.querySelector("input.flash[rel='"+i+"']").value;
+      
+      leds[i].frequency = flash;
+
+    }
 
   };
   
@@ -31,7 +81,17 @@ var BlinkstickChrome = function(){
 
   };
   
+  this.syncButton = function(){
+    
+    console.log('sync');
 
+    for (var x = 0; x < leds.length; x++) {
+      leds[x].lastTick = 0;
+      leds[x].slider.toggle(true);
+    }    
+
+  };
+  
   this.setColor = function(i,r,g,b) {
   
     var data, arr;
@@ -44,8 +104,8 @@ var BlinkstickChrome = function(){
 
       for (var x = 0; x < 8; x++) {
 
-        sliderControls[x].updateSlider(r,g,b);
-        sliderControls[x].updateLed(r,g,b);
+        leds[x].slider.updateSlider(r,g,b);
+        leds[x].slider.updateLed(r,g,b);
 
         data.push(g);
         data.push(r);
@@ -69,8 +129,8 @@ var BlinkstickChrome = function(){
   
           if (linked[l].link === true && i !== l) {
             
-            sliderControls[l].updateSlider(r,g,b);
-            sliderControls[l].updateLed(r,g,b);
+            leds[l].slider.updateSlider(r,g,b);
+            leds[l].slider.updateLed(r,g,b);
   
             data.push(g);
             data.push(r);
@@ -96,8 +156,8 @@ var BlinkstickChrome = function(){
   
       } else {
   
-        sliderControls[i].updateSlider(r,g,b);
-        sliderControls[i].updateLed(r,g,b);
+        leds[i].slider.updateSlider(r,g,b);
+        leds[i].slider.updateLed(r,g,b);
   
         data = [0, i, r, g, b];
         arr = new Uint8Array(data);
@@ -114,13 +174,15 @@ var BlinkstickChrome = function(){
   
   };
 
+
+
+
   this.initDeviceConnection = function(){
     
     var emuButtons = document.querySelectorAll("a.emu");
-    for (var s = 0; s < emuButtons.length; s++) {
-  
-      emuButtons[s].addEventListener('click', bsc.emuButton);
 
+    for (var s = 0; s < emuButtons.length; s++) {
+      emuButtons[s].addEventListener('click', bsc.emuButton);
     }
 
     chrome.hid.getDevices(DEVICE_INFO, function(devices) {
@@ -134,6 +196,7 @@ var BlinkstickChrome = function(){
   
       chrome.hid.connect(hidDevice, function(connection) {
         connectionId = connection.connectionId;
+        //Default to 8 but this needs to be detected later
         bsc.initSliders(8);
         $('.blinkstickInfo').text('Blinkstick Found');
       });
@@ -144,35 +207,37 @@ var BlinkstickChrome = function(){
 
   this.emuButton = function(e){
 
-        e.preventDefault();
-        
-        var name = $(this).attr('data-name');
-        var leds = $(this).attr('data-leds');
-        
-        if (leds > 0) {
-          
-          renderer.start(leds);
-  
-          $('.blinkstickInfo').text('Emulated '+name+' Found');
+    e.preventDefault();
     
-          bsc.initSliders(leds);
-          $('input[rel=main]').attr({'disabled':false});
-          $('#sliderControlMain').show();
-          $('#emuPreview').show();
-          renderer.render();
-
-        } else {
-
-          $('.blinkstickInfo').text('No Blinkstick Found');
+    leds = [];
     
-          bsc.initSliders(0);
-          $('input[rel=main]').attr({'disabled':true});
-          $('#sliderControlMain').hide();
-          $('#emuPreview').hide();
-          
-          renderer.stop();
-          
-        }
+    var name = $(this).attr('data-name');
+    var ledCount = $(this).attr('data-leds');
+    
+    if (ledCount > 0) {
+
+      renderer.start(ledCount);
+
+      $('.blinkstickInfo').text('Emulated '+name+' Found');
+
+      bsc.initSliders(ledCount);
+      $('input[rel=main]').attr({'disabled':false});
+      $('#sliderControlMain').show();
+      $('#emuPreview').show();
+      renderer.render();
+
+    } else {
+
+      $('.blinkstickInfo').text('No Blinkstick Found');
+
+      bsc.initSliders(0);
+      $('input[rel=main]').attr({'disabled':true});
+      $('#sliderControlMain').hide();
+      $('#emuPreview').hide();
+      
+      renderer.stop();
+      
+    }
 
   };
 
@@ -180,10 +245,16 @@ var BlinkstickChrome = function(){
 
     $('div.sliderControl').remove();
 
-    sliderControls = [];
-    
     for (var x = 0; x < n; x++) {
-      sliderControls.push(new BlinkstickChromeSlider());
+      leds.push({
+        led: {},
+        slider: new BlinkstickChromeSlider(x),
+        frequency: 0,
+        pulse: 0,
+        pattern: [],
+        onoff: false,
+        lastTick: 0
+      });
     }
 
     var sliders = document.querySelectorAll("input[type=range]");
@@ -199,6 +270,11 @@ var BlinkstickChrome = function(){
     var linkButtons = document.querySelectorAll("div.headButtons label.link");
     for (var lb = 0; lb < linkButtons.length; lb++) {
       linkButtons[lb].addEventListener('click', bsc.linkButton);
+    }
+    
+    var syncButtons = document.querySelectorAll("button.sync");
+    for (var sb = 0; sb < syncButtons.length; sb++) {
+      syncButtons[sb].addEventListener('click', bsc.syncButton);
     }
 
   };
