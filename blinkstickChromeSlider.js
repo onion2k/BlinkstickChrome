@@ -33,7 +33,6 @@ var BlinkstickChromeSlider = function(id) {
    * Set the sliders all to 0
    */
   this.toggle = function(onoff){
-    console.log(onoff);
     onoff = onoff || this.onoff;
     if (onoff === true) {
       this.onoff = false;
@@ -81,6 +80,7 @@ var BlinkstickChromeSlider = function(id) {
 
     $('i.led[rel='+_id+']').css({'color':'rgb('+r+','+g+','+b+')'});
     renderer.setColor(_id,r,g,b);
+    //bsc.setColor(_id,r,g,b);
 
   };
 
@@ -103,7 +103,7 @@ var BlinkstickChromeSlider = function(id) {
       '  <div class="panel-body">'+
   
       '      <div class="row">'+
-      '        <div class="col-xs-2" style="text-align: center;">'+
+      '        <div class="col-xs-2" style="text-align: center; position: relative;">'+
       '          <input class="red" rel="'+i+'" type="range" min=0 max=255 step=1 value=0 style="height: 70px;" orient="vertical" />'+
       '          R'+
       '        </div>'+
@@ -140,6 +140,7 @@ var BlinkstickChromeSlider = function(id) {
   _id = id || sliderControls.length;
   el = slider.sliderTemplate(_id);
   if (id !== 'main') {
+    console.log(id)
     $('div#ledSliders').append(el);
   }
 

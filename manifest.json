@@ -3,7 +3,7 @@
   "name": "BlinkstickChrome",
   "short_name": "BlinkstickChrome",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "minimum_chrome_version": "38",
 
   "icons": {
