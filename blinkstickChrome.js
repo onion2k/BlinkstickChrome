@@ -10,12 +10,16 @@ var BlinkstickChrome = function(){
   var pE = 0;
   var elapsedTotal = 0;
   var data;
+  var leds = [];
+  var hid;
 
   timer.stop();
 
   timer = new Timer({
     tick    : 1/50,
     ontick  : function(s) {
+      
+      var r,g,b;
 
       elapsed = p-s;
       elapsedTotal += elapsed;
@@ -53,9 +57,9 @@ var BlinkstickChrome = function(){
 
                       var pE = ((effectElapsed/leds[i].pattern[pp].t) * 100);
 
-                      var g = leds[i].pattern[pp].end.g - (((leds[i].pattern[pp].end.g - leds[i].pattern[pp].start.g) / 100) * pE);
-                      var r = leds[i].pattern[pp].end.r - (((leds[i].pattern[pp].end.r - leds[i].pattern[pp].start.r) / 100) * pE);
-                      var b = leds[i].pattern[pp].end.b - (((leds[i].pattern[pp].end.b - leds[i].pattern[pp].start.b) / 100) * pE);
+                      g = leds[i].pattern[pp].end.g - (((leds[i].pattern[pp].end.g - leds[i].pattern[pp].start.g) / 100) * pE);
+                      r = leds[i].pattern[pp].end.r - (((leds[i].pattern[pp].end.r - leds[i].pattern[pp].start.r) / 100) * pE);
+                      b = leds[i].pattern[pp].end.b - (((leds[i].pattern[pp].end.b - leds[i].pattern[pp].start.b) / 100) * pE);
 
                       data.push(g);
                       data.push(r);
@@ -90,17 +94,19 @@ var BlinkstickChrome = function(){
 
       }      
 
+
       if (data.length === 25) {
-        bsc.setColors(data);
+        hid.setColors(data);
       }
 
       i = 0;
       for (var d = 1; d < data.length; d+=3) {
-        var r = data[d+1];
-        var g = data[d];
-        var b = data[d+2];
+        r = data[d+1];
+        g = data[d];
+        b = data[d+2];
         leds[i++].slider.update(r,g,b);
       }
+
 
 
     }
@@ -109,8 +115,6 @@ var BlinkstickChrome = function(){
   
   timer.start(10000);
 
-  var leds = [];
-
   this.slider = function(){
 
     var i = this.getAttribute('rel');
@@ -118,24 +122,22 @@ var BlinkstickChrome = function(){
     var r,g,b,flash;
 
     if (i !== 'main') {
-
-      r = document.querySelector("input.red[rel='"+i+"']").value;
-      g = document.querySelector("input.green[rel='"+i+"']").value;
-      b = document.querySelector("input.blue[rel='"+i+"']").value;
+      
+      var col = leds[i].slider.getColor();
   
-      leds[i].slider.update(r,g,b);
+      leds[i].slider.update(col.r,col.g,col.b);
+      hid.setColor(i,col.r,col.g,col.b);
 
       flash = document.querySelector("input.flash[rel='"+i+"']").value;
       leds[i].frequency = flash;
 
     } else {
 
-      r = document.querySelector("input.red[rel='"+i+"']").value;
-      g = document.querySelector("input.green[rel='"+i+"']").value;
-      b = document.querySelector("input.blue[rel='"+i+"']").value;
+      var col = leds[i].slider.getColor();
   
       for (var x = 0; x < leds.length; x++) {
-        leds[x].slider.update(r,g,b);
+        leds[x].slider.update(col.r,col.g,col.b);
+        hid.setColor(x,col.r,col.g,col.b);
       }
 
     }
@@ -185,13 +187,7 @@ var BlinkstickChrome = function(){
 
       }
 
-      arr = new Uint8Array(data);
-    
-      if (connectionId > -1) {
-        chrome.hid.sendFeatureReport( connectionId, 6, arr.buffer, function(){
-          //console.log('Set color');
-        });
-      }
+      hid.setColors(data);
 
     } else {
 
@@ -215,25 +211,13 @@ var BlinkstickChrome = function(){
   
         }
   
-        arr = new Uint8Array(data);
-      
-        if (connectionId > -1) {
-          chrome.hid.sendFeatureReport( connectionId, 6, arr.buffer, function(){
-            //console.log('Set color');
-          });
-        }
+        hid.setColors(data);
+
   
       } else {
   
-        data = [0, i, r, g, b];
-        arr = new Uint8Array(data);
+        hid.setColor(i, r, g, b);
 
-        if (connectionId > -1) {
-          chrome.hid.sendFeatureReport( connectionId, 5, arr.buffer, function(){
-            //console.log('Set color');
-          }); 
-        }
-  
       }
       
     }
@@ -242,7 +226,7 @@ var BlinkstickChrome = function(){
 
 
   this.setColors = function(data){
-
+/*
     arr = new Uint8Array(data);
   
     if (connectionId > -1) {
@@ -250,12 +234,10 @@ var BlinkstickChrome = function(){
         //console.log('Set color');
       });
     }
-
+*/
   };
 
-
-  this.initDeviceConnection = function(){
-    
+  this.initUIListeners = function() {
     var emuButtons = document.querySelectorAll("a.emu");
     for (var s = 0; s < emuButtons.length; s++) {
       emuButtons[s].addEventListener('click', bsc.emuButton);
@@ -265,26 +247,11 @@ var BlinkstickChrome = function(){
     for (var p = 0; p < patternButtons.length; p++) {
       patternButtons[p].addEventListener('click', bsc.patternButton);
     }
-
-    chrome.hid.getDevices(DEVICE_INFO, function(devices) {
+  };
   
-      if (!devices || !devices.length) {
-       console.log('device not found');
-       return;
-      }
-      
-      hidDevice = devices[0].deviceId;
-  
-      chrome.hid.connect(hidDevice, function(connection) {
-        connectionId = connection.connectionId;
-        //Default to 8 but this needs to be detected later
-
-        bsc.start('blinkStrip', 8);
-
-      });
-    
-    });
-  
+  this.initHid = function(){
+    hid = new BlinkstickHIDInterface(bsc);
+    hid.initDeviceConnection();
   };
 
   this.emuButton = function(e){
@@ -334,10 +301,14 @@ var BlinkstickChrome = function(){
       $('#sliderControlMain').show();
       $('#emuPreview').show();
       renderer.render();
-      
-      bsc.initPattern("chase");
 
     }
+
+  };
+  
+  this.stop = function(){
+
+    bsc.start(0);
 
   };
 
@@ -384,7 +355,7 @@ var BlinkstickChrome = function(){
   
   this.initPattern = function(pattern) {
 
-    var ledCount = 8;
+    var ledCount = leds.length;
     var l;
     var t = 50;
     var t2 = t*2;
@@ -409,7 +380,37 @@ var BlinkstickChrome = function(){
         }
         break;
 
+      case "lighthouse":
+
+        for (l = 0; l < ledCount; l++) {
+          leds[l].pattern = [ 
+              {start:{r:0,g:0,b:0},end:{r:255,g:255,b:255},t:2500,type:"pulse"},
+              {start:{r:255,g:255,b:255},end:{r:0,g:0,b:0},t:2500,type:"pulse"}
+            ];
+        }
+
+        break;
+
       case "party":
+        for (var x = 0; x < 10; x++) {
+          for (l = 0; l < ledCount; l++) {
+
+            if (x%2===0) {
+              if (l%2===0) {
+                leds[l].pattern.push({r:255,g:0,b:255,t:t*10});
+              } else {
+                leds[l].pattern.push({r:255,g:255,b:255,t:t*10});
+              }
+            } else {
+              if (l%2===0) {
+                leds[l].pattern.push({r:0,g:255,b:255,t:t*10});
+              } else {
+                leds[l].pattern.push({r:0,g:0,b:255,t:t*10});
+              }
+            }
+
+          }
+        }
         break;
 
       case "spectrum":
@@ -420,11 +421,18 @@ var BlinkstickChrome = function(){
               {start:{r:0,g:0,b:0},end:{r:255,g:0,b:0},t:2500,type:"pulse"},
               {start:{r:255,g:0,b:0},end:{r:255,g:255,b:0},t:2500,type:"pulse"},
               {start:{r:255,g:255,b:0},end:{r:0,g:255,b:0},t:2500,type:"pulse"},
-              {start:{r:0,g:255,b:0},end:{r:0,g:0,b:0},t:2500,type:"pulse"},
+              {start:{r:0,g:255,b:0},end:{r:0,g:255,b:255},t:2500,type:"pulse"},
+              {start:{r:0,g:255,b:255},end:{r:0,g:0,b:255},t:2500,type:"pulse"},
+              {start:{r:0,g:0,b:255},end:{r:0,g:0,b:0},t:2500,type:"pulse"},
               750*ledCount - 750*l
             ];
         }
-
+        
+        case "off":
+  
+          for (l = 0; l < ledCount; l++) {
+            leds[l].pattern = [];
+          }
 
         break;
 
@@ -444,23 +452,6 @@ var BlinkstickChrome = function(){
     }
 
   };
-
-  chrome.hid.onDeviceAdded.addListener(function(){
-  
-    console.log('Blinkstick added');
-  
-    bsc.initDeviceConnection();
-  
-  });
-  
-  chrome.hid.onDeviceRemoved.addListener(function(){
-  
-    console.log('Blinkstick removed');
-    
-    $('.sliderControl').remove();
-    $('.blinkstickInfo').text('No Blinkstick Found');
-  
-  });
 
   return bsc;
 

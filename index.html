@@ -27,14 +27,14 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#">About</a></li>
-            <li><a href="#">Config</a></li>
+            <li><a href="about">About</a></li>
+            <li><a href="config.html">Config</a></li>
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Emulators <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li class="disabled"><a href="#" class="emu" data-name="Blinkstick" data-leds="1">Blinkstick</a></li>
-                <li class="disabled"><a href="#" class="emu" data-name="Blinkstick Nano" data-leds="2">Blinkstick Nano</a></li>
+                <li><a href="#" class="emu" data-name="Blinkstick Nano" data-leds="2">Blinkstick Nano</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#" class="emu" data-name="Blinkstrip" data-leds="8">Blinkstrip</a></li>
                 <li class="disabled"><a href="#" class="emu" data-name="Blinksquare" data-leds="8">Blinksquare</a></li>
@@ -50,8 +50,13 @@
               <ul class="dropdown-menu">
                 <li class=""><a href="#" class="pattern" data-pattern="chase">Chase</a></li>
                 <li class=""><a href="#" class="pattern" data-pattern="bounce">Bounce</a></li>
-                <li class="disabled"><a href="#" class="pattern" data-pattern="party">Party</a></li>
+                <li><a href="#" class="pattern" data-pattern="party">Party</a></li>
+                <li><a href="#" class="pattern" data-pattern="lighthouse">Lighthouse</a></li>
                 <li><a href="#" class="pattern" data-pattern="spectrum">Spectrum</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" class="pattern" data-pattern="off">Off</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="pattern.html">New Pattern</a></li>
               </ul>
             </li>
     
@@ -64,7 +69,7 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-    
+
 
     <div id="infoControl" class="clearfix" style="background-color: #FFF;">
 
@@ -136,6 +141,7 @@
     <script src="blinkstickCanvasRenderer.js"></script>
     <script src="blinkstickChromeSlider.js"></script>
     <script src="blinkstickChrome.js"></script>
+    <script src="blinkstickHid.js"></script>
 
     <script src="main.js"></script>
   

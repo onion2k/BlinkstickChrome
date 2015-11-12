@@ -13,7 +13,7 @@
 
   "app": {
     "background": {
-      "scripts": ["tcp-server.js","BlinkstickChromeTCPServer.js","background.js"]
+      "scripts": ["tcp-server.js","blinkstickChromeTCPServer.js","background.js"]
     }
   },
 

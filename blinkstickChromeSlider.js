@@ -6,6 +6,7 @@ var BlinkstickChromeSlider = function(id) {
   var slider = this;
   var _id, el;
   var r,g,b,pattern,onoff;
+  var sliderControls = [];
 
   /**
    * Get the color set for an LED
@@ -17,7 +18,7 @@ var BlinkstickChromeSlider = function(id) {
     var g = document.querySelector("input.green[rel='"+_id+"']").value;
     var b = document.querySelector("input.blue[rel='"+_id+"']").value;
     
-    return [r,g,b];
+    return { r:r,g:g,b:b };
 
   };
 
@@ -140,7 +141,6 @@ var BlinkstickChromeSlider = function(id) {
   _id = id || sliderControls.length;
   el = slider.sliderTemplate(_id);
   if (id !== 'main') {
-    console.log(id)
     $('div#ledSliders').append(el);
   }
 
